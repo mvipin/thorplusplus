@@ -51,6 +51,7 @@ THE SOFTWARE.
 #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
 #include <Wire.h>
 #endif
+#include <SoftwareSerial.h>
 
 // MPU
 #define GYRO_OFFSET_X 33
@@ -89,6 +90,9 @@ PID pid(&input, &output, &setpoint, Kp, Ki, Kd, DIRECT);
 #define IN2 12
 
 int cur_speed;
+
+// Bluetooth
+SoftwareSerial BT(8, 9); // RX, TX
 
 void dmpDataReady() {
   mpu_interrupt = true;
@@ -165,6 +169,7 @@ void pid_init(void) {
 
 void setup() {
     Serial.begin(115200);
+    BT.begin(115200);
 
     int status = gyroaccel_init();
     if (status) {
